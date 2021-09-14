@@ -22,25 +22,47 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         val intent = Intent(this, SecondActivity::class.java)
-        var answer:Int = 0
-        var aStr = editText1.text.toString()
-        var bStr = editText2.text.toString()
-        if (aStr.equals("") || bStr.equals("") || bStr.equals("0")) {
-            Snackbar.make(v, "値が入力されていないか、正しくありません。", Snackbar.LENGTH_INDEFINITE)
+        var answer:Double = 0.0
+        var aStr:String = editText1.text.toString()
+        var bStr:String = editText2.text.toString()
+        if (aStr.equals("") || bStr.equals("")) {
+            Snackbar.make(v, "値が入力されていません。", Snackbar.LENGTH_INDEFINITE)
                 .setAction("Action") {
                     Log.d("UI_PARTS", "Snackをタップした")
                 }.show()
         }else {
-            var a = Integer.parseInt(aStr)
-            var b = Integer.parseInt(bStr)
+            var a:Double = aStr.toDouble()
+            var b:Double = bStr.toDouble()
             when(v.id) {
-                R.id.add -> answer = a+b
-                R.id.sub -> answer = a-b
-                R.id.mul -> answer = a*b
-                R.id.div -> answer = a/b
+                R.id.add -> {
+                    answer = a+b
+                    intent.putExtra("VALUE", answer)
+                    startActivity(intent)
+                }
+                R.id.sub -> {
+                    answer = a-b
+                    intent.putExtra("VALUE", answer)
+                    startActivity(intent)
+                }
+                R.id.mul -> {
+                    answer = a*b
+                    intent.putExtra("VALUE", answer)
+                    startActivity(intent)
+                }
+                R.id.div -> {
+                    Log.d("kotlintest", b.toString())
+                    if (b.equals(0.0)) {
+                        Snackbar.make(v, "分母に0を入力することはできません。", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Action") {
+                                Log.d("UI_PARTS", "Snackをタップした")
+                            }.show()
+                    }else {
+                        answer = a/b
+                        intent.putExtra("VALUE", answer)
+                        startActivity(intent)
+                    }
+                }
             }
-            intent.putExtra("VALUE", answer)
-            startActivity(intent)
         }
     }
 }
